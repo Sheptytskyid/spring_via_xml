@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean id="simple_validator" class="ua.goit.offline.spring.SimpleValidator" init-method="create">
+        <property name="wrongWords">
+            <list>
+                <value>X</value>
+                <value>Y</value>
+                <value>Z</value>
+            </list>
+        </property>
+
+    </bean>
+    <bean id="checker" class="ua.goit.offline.spring.Checker">
+        <constructor-arg name="validators">
+        <list>
+            <ref bean="simple_validator"/>
+            <ref bean="reg_checker" />
+            <ref bean="file_checker" />
+        </list>
+        </constructor-arg>
+        <!--<property name="validator" ref="simple_validator"/>-->
+    </bean>
+
+    <bean id="reg_checker"
+          class="ua.goit.offline.spring.RegexpValidator"
+          init-method="compile">
+        <property name="value" value="[0-9]*"/>
+    </bean>
+
+    <bean id="file_checker" class="ua.goit.offline.spring.TextFileValidator" init-method="init">
+        <constructor-arg name="resource" value="bad_words.txt"/>
+    </bean>
+</beans>
